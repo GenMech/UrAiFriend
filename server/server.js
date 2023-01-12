@@ -24,6 +24,7 @@ app.get("/", async (req, res) => {
 app.post("/", async (req, res) => {
   try {
     const prompt = req.body.prompt;
+    // console.log(prompt);
 
     const response = await openai.createCompletion({
       model: "text-davinci-003", // model will be of GPT-3, text-davinci-003
@@ -39,7 +40,7 @@ app.post("/", async (req, res) => {
       // after getting response, now send it back to front-end
       bot: response.data.choices[0].text,
     });
-  } catch {
+  } catch (error) {
     console.log(error);
     res.status(200).send({ error });
   }

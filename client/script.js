@@ -12,7 +12,7 @@ function loader(element) {
 
   loadinterval = setInterval(() => {
     element.textContent += ".";
-    if (element.textContent === "....") {
+    if (element.textContent === ".....") {
       element.textContent = "";
     }
   }, 300);
@@ -85,17 +85,16 @@ const handleSubmit = async (e) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      prompt: data.get("prompt"), // this is the data or message coming from our textarea element on the screen
+      prompt: data.get("textEntered"), // this is the data or message coming from our textarea element on the screen
     }),
   });
 
   //after getting response, we want to clear the interval
   clearInterval(loadinterval);
   messageDiv.innerHTML = ""; // because we dont know at which point we are when we getting our reponse, for ex. at 2 dots, 3 dots etc
-
   if (response.ok) {
-    const data = response.json(); // this is giving us the actual response
-    const parsedData = data.bot.trim();
+    const data = await response.json(); // this is giving us the actual response
+    const parsedData = data.bot.trim(); // it will trim any trailing spaces '/n'
 
     typeText(messageDiv, parsedData);
   } else {
