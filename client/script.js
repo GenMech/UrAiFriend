@@ -75,7 +75,34 @@ const handleSubmit = async (e) => {
   chat_container.scrollTop = chat_container.scrollHeight; // this will put the new message in view
 
   const messageDiv = document.getElementById(uniqueID);
+
   loader(messageDiv);
+
+  // fetch data from server, Bot's response
+  const response = await fetch("http://localhost:5000", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prompt: data.get("prompt"), // this is the data or message coming from our textarea element on the screen
+    }),
+  });
+
+  //after getting response, we want to clear the interval
+  clearInterval(loadinterval);
+  messageDiv.innerHTML = ""; // because we dont know at which point we are when we getting our reponse, for ex. at 2 dots, 3 dots etc
+
+  if (response.ok) {
+    const data = response.json(); // this is giving us the actual response
+    const parsedData = data.bot.trim();
+
+    typeText(messageDiv, parsedData);
+  } else {
+    const err = await response.text();
+    messageDiv.innerHTML = "Something went out of box, try again brosk!";
+    alert(err);
+  }
 };
 
 form.addEventListener("submit", handleSubmit); // calling handleSubmit on submit buttom
