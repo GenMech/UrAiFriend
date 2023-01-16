@@ -2,7 +2,7 @@ import bot from "./assets/bot.svg";
 import user from "./assets/user.svg";
 
 const form = document.querySelector("form");
-const chat_container = document.querySelector("#chat_container");
+const chatContainer = document.querySelector("#chat_container");
 
 let loadinterval;
 
@@ -65,21 +65,21 @@ const handleSubmit = async (e) => {
   const data = new FormData(form);
 
   // User's ChatStripe
-  chat_container.innerHTML += chatStripe(false, data.get("textEntered"));
+  chatContainer.innerHTML += chatStripe(false, data.get("textEntered"));
   form.reset(); // to clear the textarea after input
 
   // AI's ChatStripe
   const uniqueID = generateUniqueID();
-  chat_container.innerHTML += chatStripe(true, "", uniqueID);
+  chatContainer.innerHTML += chatStripe(true, "", uniqueID);
 
-  chat_container.scrollTop = chat_container.scrollHeight; // this will put the new message in view
+  chatContainer.scrollTop = chatContainer.scrollHeight; // this will put the new message in view
 
   const messageDiv = document.getElementById(uniqueID);
 
   loader(messageDiv);
 
   // fetch data from server, Bot's response
-  const response = await fetch("http://localhost:5000", {
+  const response = await fetch("https://aifriendo.onrender.com", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
